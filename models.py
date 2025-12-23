@@ -2,10 +2,20 @@ from dataclasses import dataclass, field
 
 
 @dataclass
+class Subitem:
+    category: str
+    name: str
+
+
+@dataclass
 class Combo:
     source_file: str
     name: str
-    slots: dict[str, list[str]] = field(default_factory=dict)
+    slots: list[Subitem] = field(default_factory=list)
+
+    def add_subitem(self, subitem: Subitem):
+        if subitem not in self.slots:
+            self.slots.append(subitem)
 
 
 @dataclass
@@ -29,9 +39,13 @@ class Menu:
 
             combo = Combo(
                 source_file=source,
-                name=item['name'],
-                slots=item['slots'],
+                name=item['name']
             )
+
+            for category, names in item['slots'].items():
+                for name in names:
+                    subitem = Subitem(category, name)
+                    combo.add_subitem(subitem)
 
             if combo_id not in self.combos:
                 self.combos[combo_id] = ComboVersion(combo_id)

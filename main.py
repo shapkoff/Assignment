@@ -8,15 +8,15 @@ from serializer import serialize_menu_to_json
 
 
 async def main() -> None:
-    with open('input_data.json', 'r') as f:
-        urls = json.load(f)['url']
+    with open('input_data.json', 'r') as file:
+        urls = json.load(file)['url']
 
     downloaded_files = await download_all(urls)
 
     menu = Menu()
     for file_name in downloaded_files:
-        with open(file_name, 'r') as f:
-            menu.add_combo(json.load(f))
+        with open(file_name, 'r') as file:
+            menu.add_combo(json.load(file))
 
     serialized_file = serialize_menu_to_json(menu)
 
